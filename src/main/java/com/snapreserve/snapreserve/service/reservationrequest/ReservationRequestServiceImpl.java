@@ -1,7 +1,9 @@
 package com.snapreserve.snapreserve.service.reservationrequest;
 
-import com.snapreserve.snapreserve.model.msg.ReservationEvent;
+import com.snapreserve.snapreserve.exception.NoAvailableSlotsException;
+import com.snapreserve.snapreserve.dto.msg.ReservationEvent;
 import com.snapreserve.snapreserve.service.eventpublisher.ReservationEventPublisher;
+import com.snapreserve.snapreserve.service.reservationrequest.model.ParsedSlot;
 import com.snapreserve.snapreserve.service.reservationrequest.model.ReserveModel;
 import com.snapreserve.snapreserve.service.reservationrequest.model.ReserveResultModel;
 import com.snapreserve.snapreserve.service.slotqueue.SlotQueueService;
@@ -23,18 +25,19 @@ public class ReservationRequestServiceImpl implements ReservationRequestService 
     public ReserveResultModel doReserve(ReserveModel model) {
         String slot = slotService.popAndHoldSlot();
         if (slot == null) {
-            throw new RuntimeException("No available slots");
+            throw new NoAvailableSlotsException("No available Reservation slots");
         }
-        Long slotId = Long.valueOf(slot.split(":")[0]);
-        String slotDate = slot.split(":")[1];
+        ParsedSlot parsedSlot = ParsedSlot.parse(slot);
+        String reservationId = model.userName() + ":" + parsedSlot.id();
 
         ReservationEvent event = new ReservationEvent();
+        event.setReservationId(reservationId);
         event.setUserName(model.userName());
-        event.setSlotId(slotId);
-
+        event.setSlotId(parsedSlot.id());
         eventPublisher.publish(event);
 
-        return new ReserveResultModel(slotDate);
+        log.info("Slot {} reserved successfully for user {} with reservationId {}", parsedSlot.id(), model.userName(), reservationId);
+        return new ReserveResultModel(reservationId, parsedSlot.getDisplayRange());
     }
 
 }

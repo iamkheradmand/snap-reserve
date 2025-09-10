@@ -42,12 +42,11 @@ public class RedisSlotQueueServiceImpl implements SlotQueueService {
 
     @Override
     public void refreshAvailableSlots(List<AvailableSlots> slots) {
-        log.info("[SlotCacheServiceImpl] - going to update redis set");
+        log.info("going to update redis set");
 
         List<String> args = new ArrayList<>(slots.size() * 2);
         for (AvailableSlots s : slots) {
-            //  System.out.println("slots " + s.getId() + "date : " + s.getStart_time());
-            args.add(s.getId() + ":" + s.getStart_time().toString() + "-" + s.getEnd_time().toString());
+            args.add(s.getId() + "|" + s.getStart_time().toString() + "|" + s.getEnd_time().toString());
             args.add(String.valueOf(s.getStart_time()
                     .toEpochSecond(ZoneOffset.UTC)));
         }
@@ -58,7 +57,7 @@ public class RedisSlotQueueServiceImpl implements SlotQueueService {
                 args.toArray()
         );
 
-        log.info("[SlotCacheServiceImpl] - Redis set update result was : {}", updateResult);
+        log.info("Redis set update result was : {}", updateResult);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.snapreserve.snapreserve.service.eventpublisher;
 
 
 import com.snapreserve.snapreserve.config.ConfigProvider;
-import com.snapreserve.snapreserve.model.msg.ReservationEvent;
+import com.snapreserve.snapreserve.dto.msg.ReservationEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

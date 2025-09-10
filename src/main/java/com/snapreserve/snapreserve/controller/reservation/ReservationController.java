@@ -1,11 +1,13 @@
-package com.snapreserve.snapreserve.controller;
+package com.snapreserve.snapreserve.controller.reservation;
 
-import com.snapreserve.snapreserve.controller.mapper.ReservationControllerMapper;
-import com.snapreserve.snapreserve.model.base.BaseResponse;
-import com.snapreserve.snapreserve.model.reponse.DeleteReservationResponse;
-import com.snapreserve.snapreserve.model.request.ReservationRequest;
+import com.snapreserve.snapreserve.controller.reservation.mapper.ReservationControllerMapper;
+import com.snapreserve.snapreserve.dto.base.BaseResponse;
+import com.snapreserve.snapreserve.dto.reponse.DeleteReservationResponse;
+import com.snapreserve.snapreserve.dto.request.ReservationRequest;
+import com.snapreserve.snapreserve.service.reservation.ReservationService;
 import com.snapreserve.snapreserve.service.reservationrequest.ReservationRequestService;
 import com.snapreserve.snapreserve.service.reservationrequest.model.ReserveResultModel;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +28,8 @@ public class ReservationController {
 
     private final ReservationRequestService reservationRequestService;
 
+    private final ReservationService reservationPersistenceService;
+
     private final ReservationControllerMapper mapper;
 
     /*
@@ -34,19 +38,19 @@ public class ReservationController {
             --data-raw '{
             "userName":"iamkheradmand"
             }'
-
 */
 
     @PostMapping
-    public ResponseEntity<BaseResponse> reserve(@RequestBody ReservationRequest request) {
-        log.info("[ReservationController] - Received reservation request {}", request);
+    public ResponseEntity<BaseResponse> reserve(@RequestBody @Valid ReservationRequest request) {
+        log.info("Received reservation request {}", request);
         ReserveResultModel reserveResultModel = reservationRequestService.doReserve(mapper.toReserveModel(request));
         return ResponseEntity.ok(mapper.toReservationResponse(reserveResultModel));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> deleteReservation(@PathVariable("id") String id) {
-        log.info("[ReservationController] - going to delete reservation : {}", id);
+    public ResponseEntity<BaseResponse> deleteReservation(@PathVariable("id") String reservationId) {
+        log.info("going to delete reservation : {}", reservationId);
+        reservationPersistenceService.deleteReservation(mapper.toDeleteReserveModel(reservationId));
         return ResponseEntity.ok(new DeleteReservationResponse());
     }
 

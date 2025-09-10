@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-	//Optional<Reservation> findById(String username);
+	void deleteByReservationId(String reservationId);
 }

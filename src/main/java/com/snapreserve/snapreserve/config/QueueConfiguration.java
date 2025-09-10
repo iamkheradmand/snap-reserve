@@ -17,26 +17,46 @@ import org.springframework.core.env.Environment;
 @Configuration
 public class QueueConfiguration {
 
-	private final ConfigProvider configProvider;
+    private final ConfigProvider configProvider;
 
-	@Bean
-	public Queue reservationQueue() {
-		return QueueBuilder.durable(configProvider.getReservationQueue())
-				.build();
+    @Bean
+    public Queue reservationQueue() {
+        return QueueBuilder.durable(configProvider.getReservationQueue())
+                .withArgument("x-dead-letter-exchange", configProvider.getReservationDeadLetterExchange())
+                .withArgument("x-dead-letter-routing-key", configProvider.getReservationDeadLetterRoutingKey())
+                .build();
 
-	}
+    }
 
-	@Bean
-	public DirectExchange exchange() {
-		return new DirectExchange(configProvider.getReservationExchange());
-	}
+    @Bean
+    public DirectExchange exchange() {
+        return new DirectExchange(configProvider.getReservationExchange());
+    }
 
 
-	@Bean
-	public Binding bindingQueueOne() {
-		return BindingBuilder.bind(reservationQueue())
-				.to(exchange())
-				.with(configProvider.getReservationRoutingKey());
-	}
+    @Bean
+    public Binding bindingQueueOne() {
+        return BindingBuilder.bind(reservationQueue())
+                .to(exchange())
 
+                .with(configProvider.getReservationRoutingKey());
+    }
+
+    @Bean
+    public Queue deadLetterQueue() {
+        return QueueBuilder.durable(configProvider.getReservationDeadLetterQueue())
+                .build();
+    }
+
+    @Bean
+    public DirectExchange deadLetterExchange() {
+        return new DirectExchange(configProvider.getReservationDeadLetterExchange());
+    }
+
+    @Bean
+    public Binding deadLetterBinding() {
+        return BindingBuilder.bind(deadLetterQueue())
+                .to(deadLetterExchange())
+                .with(configProvider.getReservationDeadLetterRoutingKey());
+    }
 }

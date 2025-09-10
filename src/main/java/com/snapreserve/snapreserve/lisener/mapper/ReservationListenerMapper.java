@@ -1,7 +1,7 @@
 package com.snapreserve.snapreserve.lisener.mapper;
 
-import com.snapreserve.snapreserve.model.msg.ReservationEvent;
-import com.snapreserve.snapreserve.service.reservationpersistance.model.PersistReserveModel;
+import com.snapreserve.snapreserve.dto.msg.ReservationEvent;
+import com.snapreserve.snapreserve.service.reservation.model.PersistReserveModel;
 import org.mapstruct.Mapper;
 
 

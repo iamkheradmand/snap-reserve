@@ -6,6 +6,7 @@ import com.snapreserve.snapreserve.service.slotqueue.SlotQueueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,6 +21,7 @@ public class SlotQueueRefresher {
 	private final SlotQueueService slotCacheService;
 
 	@Scheduled(fixedDelayString = "${scheduler.slot-queue.update.interval}")
+	@SchedulerLock(name = "refreshAvailableSlots", lockAtMostFor = "PT7M", lockAtLeastFor = "PT5M")
 	public void refresh() {
 		PageRequest pageRequest = PageRequest.of(0, 10_000);
 		Slice<AvailableSlots> availableSlots = slotRepository.findAvailableSlots(pageRequest);
