@@ -26,7 +26,6 @@ public class ReservationListener {
 			persistReservation.persistReserve(mapper.toPersistReserveModel(event));
 		} catch (Exception e) {
 			log.info("[ReservationListener] - an exception happen during message persistence : {}", event);
-
 			throw new AmqpRejectAndDontRequeueException("Failed to persist", e);
 		}
 	}

@@ -12,4 +12,5 @@ public class SnapReserveApplication {
 		SpringApplication.run(SnapReserveApplication.class, args);
 	}
 
+
 }
