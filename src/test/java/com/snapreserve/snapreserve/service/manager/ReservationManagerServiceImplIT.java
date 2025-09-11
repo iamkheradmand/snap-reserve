@@ -3,7 +3,6 @@ package com.snapreserve.snapreserve.service.manager;
 import com.snapreserve.snapreserve.BaseIT;
 import com.snapreserve.snapreserve.dto.msg.ReservationEvent;
 import com.snapreserve.snapreserve.exception.NoAvailableSlotsException;
-import com.snapreserve.snapreserve.service.manager.ReservationManagerService;
 import com.snapreserve.snapreserve.service.manager.model.ReserveModel;
 import com.snapreserve.snapreserve.service.manager.model.ReserveResultModel;
 import com.snapreserve.snapreserve.service.publisher.ReservationEventPublisher;

@@ -32,7 +32,7 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
+	@Column (nullable = false, unique = true)
 	private String reservationId;
 
 	@ManyToOne

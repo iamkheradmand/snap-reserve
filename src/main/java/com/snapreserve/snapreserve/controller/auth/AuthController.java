@@ -7,6 +7,7 @@ import com.snapreserve.snapreserve.dto.request.RefreshTokenRequest;
 import com.snapreserve.snapreserve.dto.request.RegisterRequest;
 import com.snapreserve.snapreserve.service.security.AuthService;
 import com.snapreserve.snapreserve.service.security.model.TokenModel;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/auth",
         produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Authentication", description = "(Production environment only), Please Check active profile!")
 @AllArgsConstructor
 public class AuthController {
 

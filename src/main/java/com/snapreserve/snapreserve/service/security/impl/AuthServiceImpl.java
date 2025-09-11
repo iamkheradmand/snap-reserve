@@ -8,6 +8,7 @@ import com.snapreserve.snapreserve.service.security.model.TokenModel;
 import com.snapreserve.snapreserve.service.security.model.UserDetailsModel;
 import com.snapreserve.snapreserve.utils.JwtUtil;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -10,8 +10,6 @@ import com.snapreserve.snapreserve.repository.user.UserRepository;
 import com.snapreserve.snapreserve.repository.user.Users;
 import com.snapreserve.snapreserve.service.reservation.model.DeleteReserveModel;
 import com.snapreserve.snapreserve.service.reservation.model.PersistReserveModel;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,9 +36,6 @@ class ReservationServiceImplIT extends BaseIT {
 
     @Autowired
     private ReservationRepository reservationRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @BeforeEach
     void setUp() {
@@ -171,7 +166,7 @@ class ReservationServiceImplIT extends BaseIT {
         assertThat(reservationRepository.findByReservationId(expectedReservationId).isEmpty()).isTrue();
     }
 
-    void cleanDatabase() {
+   private void cleanDatabase() {
         reservationRepository.deleteAll();
         slotsRepository.deleteAll();
         userRepository.deleteAll();

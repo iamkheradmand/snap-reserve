@@ -7,6 +7,8 @@ import com.snapreserve.snapreserve.dto.request.ReservationRequest;
 import com.snapreserve.snapreserve.service.reservation.ReservationService;
 import com.snapreserve.snapreserve.service.manager.ReservationManagerService;
 import com.snapreserve.snapreserve.service.manager.model.ReserveResultModel;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "api/reservation/v1/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/reservation", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Reservation Management", description = "APIs for creating and managing reservations")
 @RequiredArgsConstructor
 public class ReservationController {
 
@@ -32,26 +35,20 @@ public class ReservationController {
 
     private final ReservationControllerMapper mapper;
 
-    /*
-    curl --location --request POST 'http://localhost:8080/api/reservation/v1/' \
-            --header 'Content-Type: application/json' \
-            --data-raw '{
-            "userName":"iamkheradmand"
-            }'
-*/
-
+    @Operation(summary = "Create a new reservation", description = "Allocates next available time slot for user and returns reservation details")
     @PostMapping
     public ResponseEntity<BaseResponse> reserve(@RequestBody @Valid ReservationRequest request) {
-        log.info("Received reservation request {}", request);
+        log.info("received reservation request {}", request);
         ReserveResultModel reserveResultModel = processorService.doReserve(mapper.toReserveModel(request));
         return ResponseEntity.ok(mapper.toReservationResponse(reserveResultModel));
     }
 
+    @Operation(summary = "Delete existing reservation", description = "Frees up the reserved time slot")
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> deleteReservation(@PathVariable("id") String reservationId) {
+    public ResponseEntity deleteReservation(@PathVariable("id") String reservationId) {
         log.info("going to delete reservation : {}", reservationId);
         reservationService.deleteReservation(mapper.toDeleteReserveModel(reservationId));
-        return ResponseEntity.ok(new DeleteReservationResponse());
+        return ResponseEntity.ok().build();
     }
 
 }
