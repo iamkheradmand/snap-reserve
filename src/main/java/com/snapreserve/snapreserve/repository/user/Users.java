@@ -14,7 +14,9 @@ import org.springframework.data.annotation.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+		@Index(name = "idx_users_username", columnList = "username")
+})
 @Data
 @Builder
 public class Users {
