@@ -10,7 +10,6 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +24,6 @@ public class QueueConfiguration {
                 .withArgument("x-dead-letter-exchange", configProvider.getReservationDeadLetterExchange())
                 .withArgument("x-dead-letter-routing-key", configProvider.getReservationDeadLetterRoutingKey())
                 .build();
-
     }
 
     @Bean
