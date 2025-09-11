@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class RedisSlotQueueServiceImpl implements SlotQueueService {
 
     private static final String AVAILABLE_SLOTS_KEY = "available_slots";
-    private static final String TEMP_AVAILABLE_SLOTS_KEY = "available_slots_temp";
     private static final String HOLD_KEY_PREFIX = "slot:hold:";
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -42,18 +41,16 @@ public class RedisSlotQueueServiceImpl implements SlotQueueService {
 
     @Override
     public void refreshAvailableSlots(List<AvailableSlots> slots) {
-        log.info("going to update redis set");
+        log.info("going to update redis set : " + slots.size());
 
         List<String> args = new ArrayList<>(slots.size() * 2);
         for (AvailableSlots s : slots) {
             args.add(s.getId() + "|" + s.getStart_time().toString() + "|" + s.getEnd_time().toString());
-            args.add(String.valueOf(s.getStart_time()
-                    .toEpochSecond(ZoneOffset.UTC)));
         }
 
         String updateResult = redisTemplate.execute(
                 replaceSlotsScript,
-                Arrays.asList(TEMP_AVAILABLE_SLOTS_KEY, AVAILABLE_SLOTS_KEY, HOLD_KEY_PREFIX),
+                Arrays.asList(AVAILABLE_SLOTS_KEY, HOLD_KEY_PREFIX),
                 args.toArray()
         );
 

@@ -1,11 +1,11 @@
-package com.snapreserve.snapreserve.service.reservationrequest;
+package com.snapreserve.snapreserve.service.manager;
 
 import com.snapreserve.snapreserve.exception.NoAvailableSlotsException;
 import com.snapreserve.snapreserve.dto.msg.ReservationEvent;
-import com.snapreserve.snapreserve.service.eventpublisher.ReservationEventPublisher;
-import com.snapreserve.snapreserve.service.reservationrequest.model.ParsedSlot;
-import com.snapreserve.snapreserve.service.reservationrequest.model.ReserveModel;
-import com.snapreserve.snapreserve.service.reservationrequest.model.ReserveResultModel;
+import com.snapreserve.snapreserve.service.publisher.ReservationEventPublisher;
+import com.snapreserve.snapreserve.service.manager.model.ParsedSlot;
+import com.snapreserve.snapreserve.service.manager.model.ReserveModel;
+import com.snapreserve.snapreserve.service.manager.model.ReserveResultModel;
 import com.snapreserve.snapreserve.service.slotqueue.SlotQueueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ReservationRequestServiceImpl implements ReservationRequestService {
+public class ReservationManagerServiceImpl implements ReservationManagerService {
 
     private final SlotQueueService slotService;
 

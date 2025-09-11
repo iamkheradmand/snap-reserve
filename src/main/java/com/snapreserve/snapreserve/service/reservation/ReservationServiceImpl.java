@@ -1,5 +1,7 @@
 package com.snapreserve.snapreserve.service.reservation;
 
+import com.snapreserve.snapreserve.exception.ReservationDefaultException;
+import com.snapreserve.snapreserve.exception.ReservationSlotException;
 import com.snapreserve.snapreserve.repository.reservation.Reservation;
 import com.snapreserve.snapreserve.repository.reservation.ReservationRepository;
 import com.snapreserve.snapreserve.repository.sluts.AvailableSlots;
@@ -29,13 +31,13 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public void persistReservation(PersistReserveModel model) {
         Users user = userRepository.findByUsername(model.userName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ReservationDefaultException("User not found"));
 
         AvailableSlots slot = slotsRepository.findByIdForUpdate(model.slotId())
-                .orElseThrow(() -> new RuntimeException("Slot not found"));
+                .orElseThrow(() -> new ReservationSlotException("Slot not found:" + model.slotId()));
 
         if (slot.is_reserved()) {
-            throw new RuntimeException("Slot already reserved");
+            throw new ReservationSlotException("Slot already reserved");
         }
 
         slot.set_reserved(true);
@@ -47,9 +49,10 @@ public class ReservationServiceImpl implements ReservationService {
         res.setUser(user);
         reservationRepository.save(res);
 
-        log.info("Persistence finished successfully for {}", model);
+        log.info("Persistence finished for {}", model);
     }
 
+    @Transactional
     @Override
     public void deleteReservation(DeleteReserveModel model) {
         reservationRepository.deleteByReservationId(model.reservationId());

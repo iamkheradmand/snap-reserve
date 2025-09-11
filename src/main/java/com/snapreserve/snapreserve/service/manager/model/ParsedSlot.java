@@ -1,4 +1,4 @@
-package com.snapreserve.snapreserve.service.reservationrequest.model;
+package com.snapreserve.snapreserve.service.manager.model;
 
 public record ParsedSlot(Long id, String startTime, String endTime) {
     public String getDisplayRange() {

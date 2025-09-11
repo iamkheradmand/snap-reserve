@@ -8,7 +8,6 @@ import com.snapreserve.snapreserve.dto.request.RegisterRequest;
 import com.snapreserve.snapreserve.service.security.AuthService;
 import com.snapreserve.snapreserve.service.security.model.TokenModel;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Profile("!local & !test")
 @RestController
 @RequestMapping(value = "/api/auth",
         produces = MediaType.APPLICATION_JSON_VALUE,

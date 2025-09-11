@@ -5,8 +5,8 @@ import com.snapreserve.snapreserve.dto.base.BaseResponse;
 import com.snapreserve.snapreserve.dto.reponse.DeleteReservationResponse;
 import com.snapreserve.snapreserve.dto.request.ReservationRequest;
 import com.snapreserve.snapreserve.service.reservation.ReservationService;
-import com.snapreserve.snapreserve.service.reservationrequest.ReservationRequestService;
-import com.snapreserve.snapreserve.service.reservationrequest.model.ReserveResultModel;
+import com.snapreserve.snapreserve.service.manager.ReservationManagerService;
+import com.snapreserve.snapreserve.service.manager.model.ReserveResultModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ReservationController {
 
-    private final ReservationRequestService reservationRequestService;
+    private final ReservationManagerService processorService;
 
-    private final ReservationService reservationPersistenceService;
+    private final ReservationService reservationService;
 
     private final ReservationControllerMapper mapper;
 
@@ -43,14 +43,14 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<BaseResponse> reserve(@RequestBody @Valid ReservationRequest request) {
         log.info("Received reservation request {}", request);
-        ReserveResultModel reserveResultModel = reservationRequestService.doReserve(mapper.toReserveModel(request));
+        ReserveResultModel reserveResultModel = processorService.doReserve(mapper.toReserveModel(request));
         return ResponseEntity.ok(mapper.toReservationResponse(reserveResultModel));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteReservation(@PathVariable("id") String reservationId) {
         log.info("going to delete reservation : {}", reservationId);
-        reservationPersistenceService.deleteReservation(mapper.toDeleteReserveModel(reservationId));
+        reservationService.deleteReservation(mapper.toDeleteReserveModel(reservationId));
         return ResponseEntity.ok(new DeleteReservationResponse());
     }
 

@@ -1,4 +1,4 @@
-package com.snapreserve.snapreserve.service.eventpublisher;
+package com.snapreserve.snapreserve.service.publisher;
 
 import com.snapreserve.snapreserve.dto.msg.ReservationEvent;
 

@@ -17,4 +17,9 @@ public class GlobalHttpExceptionHandler {
         return ErrorResponse.create(ex, HttpStatusCode.valueOf(409), ex.getMessage());
     }
 
+    @ExceptionHandler(ReservationDefaultException.class)
+    public ErrorResponse handleDefaultException(ReservationDefaultException ex) {
+        return ErrorResponse.create(ex, HttpStatusCode.valueOf(422),"an error happen, please try again");
+    }
+
 }

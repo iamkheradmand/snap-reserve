@@ -1,9 +1,12 @@
--- 1. Get the SMALLEST SCORED member (earliest time) from the ZSET
-local slotId = redis.call('ZRANGE', KEYS[1], 0, 0)[1]
--- 2. If found...
+-- KEYS[1] = available_slots (List)
+-- KEYS[2] = hold key prefix
+-- ARGV[1] = expire time
+
+-- 1. Pop earliest slot (head of the list)
+local slotId = redis.call('LPOP', KEYS[1])
+
+-- 2. If found, set hold key
 if slotId then
-    -- Remove it from the ZSET
-    redis.call('ZREM', KEYS[1], slotId)
     -- Set a key like "KEYS[2]slotId" with value "reserved", expiring in ARGV[1] seconds
     redis.call('SET', KEYS[2] .. slotId, 'reserved', 'EX', ARGV[1])
     -- Return the slotId that was reserved

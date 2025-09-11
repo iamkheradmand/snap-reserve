@@ -1,8 +1,9 @@
-package com.snapreserve.snapreserve.service.eventpublisher;
+package com.snapreserve.snapreserve.service.publisher;
 
 
 import com.snapreserve.snapreserve.config.ConfigProvider;
 import com.snapreserve.snapreserve.dto.msg.ReservationEvent;
+import com.snapreserve.snapreserve.exception.ReservationDefaultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +24,7 @@ public class ReservationEventPublisherImpl implements ReservationEventPublisher 
 		try {
 			rabbitTemplate.convertAndSend(configProvider.getReservationExchange(), configProvider.getReservationRoutingKey(), event);
 		} catch (Exception exception) {
-			throw new RuntimeException("an error happen, please try again");
+			throw new ReservationDefaultException("rabbitmq Failed - an error happen, please try again");
 		}
 	}
 
