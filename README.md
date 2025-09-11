@@ -10,9 +10,9 @@ and race-condition-free.
 # 🔄 How It Works
 
 1. **Periodic Synchronization** : Every 5 minutes, the system fetches available time slots from database and syncs them
-   to a Redis sorted queue, ordered by time. High performance O(1) list operations
+   to a Redis sorted queue, ordered by time. 
 2. **Atomic Slot Allocation** : When a user requests a reservation, Redis atomically pops the nearest available time
-   slot using a single-threaded, atomic operation that prevents race conditions.
+   slot using a single-threaded, atomic operation that prevents race conditions; High performance O(1) list operations.
 3. **Temporary Hold** : The popped slot is immediately placed on a temporary hold with TTL (time-to-live) to prevent it
    from being re-added to the available queue during sync lag periods, ensuring the slot remains reserved for the
    current user.
